@@ -9,6 +9,7 @@ const TokenRepository = require('../repositories/token.repo');
 const UserService = require('../services/user.service');
 const MailerService = require('../services/mailer.service');
 const createAuth = require('../middlewares/auth');
+const Constant = require('../models/constant.model');
 var router = express.Router();
 
 const userRepository = new GenRepository(User);
@@ -18,7 +19,7 @@ const signin = async function (req, res){
     const newUser = assign(User, req.body);
     if(req.body.confirmPassword !== newUser.password)
         throw new CustomError('Les 2 mots de passes sont differentes')
-    newUser.roleId = 1;
+    newUser.roleId = Constant.roleID.visitor;
     await userRepository.insert([newUser]);
     // Send mail
     let mail = UserService.buildSigninMail(newUser);
@@ -35,7 +36,7 @@ const login = async function (req, res){
 
 const logout = async function (req, res){
     await tokenRepository.destroyToken(req.headers.token);
-    res.json({message: "User deconnecte avec succes"});
+    res.json({message: "Utilisateur deconnecté avec succès"});
 }
 
 const canAccess = async function (req, res) { 

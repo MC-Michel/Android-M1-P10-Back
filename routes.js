@@ -16,9 +16,9 @@ module.exports = function (app){
     app.use("/repairs-historic", repairsHistoricRoutes);
     app.use("/repairs", rapairsRoutes);
     app.use("/expenses", expensesRoutes);
-    app.use("/users", usersRoutes);
     app.use("/stats", statsRoutes);
 
     // Routes for mada's project
     app.use("/destination", destinationsRoutes);
+    app.use("/users", usersRoutes);
 }

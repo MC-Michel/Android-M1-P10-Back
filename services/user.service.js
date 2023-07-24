@@ -51,18 +51,16 @@ module.exports = class UserService {
     }
 
     static buildSigninMail(newUser){
-        let societyName = "K-OJAO";
+        let societyName = "Zahao";
         let mail = {
             to: newUser.email,
             subject: `Bienvenue chez ${societyName}`,
             html: `
                 <p>Cher ${newUser.firstName},</p>
 
-                <p>Nous sommes ravis de vous accueillir sur notre site web ${societyName}. Nous sommes un garage qui propose des services de réparation et d'entretien pour les véhicules de toutes marques.</p>
+                <p>Nous sommes ravis de vous accueillir dans notre communauté d'explorateurs passionnés de Madagascar ! En tant que partenaire de voyage, nous sommes enchantés de vous offrir une expérience inoubliable pour découvrir les trésors cachés et les merveilles de cette île enchanteresse.</p>
                 
-                <p>Nous espérons que vous trouverez toutes les informations nécessaires pour prendre soin de votre véhicule sur notre site. N'hésitez pas à nous contacter si vous avez des questions ou si vous souhaitez prendre rendez-vous pour une révision.</p>
-                
-                <p>En vous inscrivant sur notre site, vous avez accès à des offres exclusives et des réductions sur nos services. N'oubliez pas de vérifier régulièrement votre compte pour ne pas manquer ces opportunités.</p>
+                <p>Notre application mobile a été spécialement conçue pour vous aider à tirer le meilleur parti de votre voyage à Madagascar. Que vous soyez un aventurier en quête de nouvelles découvertes, un amoureux de la nature en quête de panoramas à couper le souffle, ou un curieux désireux d'explorer les richesses culturelles de cette destination unique, notre application est votre guide ultime.</p>
                 
                 <p>Encore une fois, bienvenue chez ${societyName} et nous espérons vous voir bientôt.</p>
                 

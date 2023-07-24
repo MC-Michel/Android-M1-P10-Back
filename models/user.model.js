@@ -28,9 +28,6 @@ class User {
         "roleId": {
             type: 'int'
         },
-        "customerData": {
-            classConstructor: Customer
-        }
     }
     static createSchemaDto = (()=> {
         const ans = { ...User.schema,

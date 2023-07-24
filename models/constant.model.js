@@ -24,5 +24,9 @@ class Constant {
         created : 0,
         validated : 1
     };
+    static roleID = {
+        visitor : 1,
+        admin : 2,
+    }
 }
 module.exports = Constant;
