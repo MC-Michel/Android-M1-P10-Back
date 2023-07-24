@@ -18,5 +18,11 @@ class Constant {
         ended : 2
     };
     static tva = 20;
+    // For mada's project
+    static destinationStatus = {
+        deleted : -1,
+        created : 0,
+        validated : 1
+    };
 }
 module.exports = Constant;
