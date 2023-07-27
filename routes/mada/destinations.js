@@ -13,6 +13,7 @@ const createAuth = require('../../middlewares/auth');
 const DestinationRepository = require('../../repositories/mada/destination.repo');
 const { findCoreDestinationById } = require('../../services/mada/destination.service');
 const { destinationStatus } = require('../../models/constant.model');
+const FirebaseService = require('../../services/mada/external/firebase.service');
 var router = express.Router();
 
 const repository = new DestinationRepository();
@@ -32,6 +33,12 @@ const insertDestination = async function(req, res) {
   body.status = Constant.destinationStatus.created;
   body.registrationDate = new Date();
   await repository.insert([body]);
+  // Notification
+  const nofitification = {
+    title: 'Destination créée',
+    body: "Une destination vient d'être ajoutée sur l'application! Soyez le premier à le visiter sur votre application!",
+  }
+  await FirebaseService.pushNotification(nofitification);
   res.json({message: "Destination created"});
 }
 const updateDestination = async function(req, res) {
