@@ -13,4 +13,8 @@ module.exports = class FirebaseService{
             notification: notification,
         });
     }
+    
+    static subscribeToDefaultTopic(token){
+        return admin.messaging().subscribeToTopic(token, topic);
+    }
 }
