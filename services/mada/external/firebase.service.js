@@ -17,4 +17,8 @@ module.exports = class FirebaseService{
     static subscribeToDefaultTopic(token){
         return admin.messaging().subscribeToTopic(token, topic);
     }
+
+    static unsubscribeToDefaultTopic(token){
+        return admin.messaging().unsubscribeFromTopic(token, topic);
+    }
 }

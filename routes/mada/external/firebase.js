@@ -5,13 +5,19 @@ var router = express.Router();
 
 const subscribeToDefaultTopic = async function(req, res) {
     const token = req.body.token;
-    console.log(token);
     await FirebaseService.subscribeToDefaultTopic(token);
-    res.json({message: "Destination created"});
+    res.json({message: "Subscription created"});
+}
+
+const unsubscribeToDefaultTopic = async function(req, res) {
+    const token = req.body.token;
+    await FirebaseService.unsubscribeToDefaultTopic(token);
+    res.json({message: "Unsubscribed successfully"});
 }
 
 
 //Firebase endpoints
 router.post('/subscribe-to-default-topic', createRouteCallback(subscribeToDefaultTopic));
+router.post('/unsubscribe-to-default-topic', createRouteCallback(unsubscribeToDefaultTopic));
 
 module.exports = router;
