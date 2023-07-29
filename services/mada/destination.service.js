@@ -25,6 +25,7 @@ module.exports = class DestinationService {
 
     static async findCoreDestinations(params){
         if(!params.filter) params.filter = []
+        params.excludeFields = ['content'] // We dont select the content when fetching list
         params.filter.push({
             column: 'deletedAt',
             type:'date',
@@ -34,7 +35,7 @@ module.exports = class DestinationService {
         return result;
     }
 
-    
+   
     
 }
 

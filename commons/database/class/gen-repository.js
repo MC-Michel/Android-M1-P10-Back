@@ -156,6 +156,16 @@ class GenRepository {
         const deletedAt = new Date();
         return await collection.updateOne({_id: ObjectID(id)}, {$set: {deletedAt}});
     }
+
+    createPaginationAggregates(){
+        const paginationOptions = this.createPaginationOptions();
+
+        return [
+            {$sort: paginationOptions.sort},
+            {$skip: paginationOptions.skip},
+            {$limit: paginationOptions.limit}
+        ];
+    }
 }
 
 module.exports = GenRepository;

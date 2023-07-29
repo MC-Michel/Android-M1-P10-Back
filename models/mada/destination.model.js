@@ -1,7 +1,7 @@
 const {body} = require('express-validator'); 
 
 const _id = {
-    tyep: 'string',
+    type: 'string',
     validatorGetter: (paramPropertyName='_id')=> body(paramPropertyName).isString().withMessage('Identifiant invalide') 
 }
 class Destination {
