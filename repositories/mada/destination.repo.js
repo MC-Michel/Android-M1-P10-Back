@@ -7,6 +7,7 @@ const { formatAndTrunc } = require("../../commons/functions/gen-date");
 const { getConnection } = require("../../configs/db");
 const Destination = require("../../models/mada/destination.model");
 const Constant = require("../../models/constant.model");
+const FavoriteDestination = require("../../models/mada/favorite-destination.model");
 const vars = {
     "year": {
         timePeriodFormat: "%Y-%m",
@@ -20,5 +21,44 @@ const vars = {
 module.exports = class DestinationRepository extends GenRepository {
     constructor(){
         super(Destination);
+    }
+    //same params as in general find. 
+    async findWithRelations(params){
+        const collection = this.getCollection();
+        const filters = this.createMatchOptions(params.filter, params.filterMode);
+        const paginationAggregates = this.createPaginationAggregates(params.pagination);
+        
+        const projectAggregate = {};
+        params.excludeFields.map(fieldToExclude => projectAggregate[fieldToExclude] = 0)
+      
+
+        const aggregates = [
+            {
+                $lookup: {
+                    from: FavoriteDestination.collection,
+                    localField: "_id",
+                    foreignField: "destinationId",
+                    as: "favorites"
+                }
+            },
+            {
+                $unwind: "$favorites"
+            },
+            {
+                $project: projectAggregate
+            },
+            {
+                $match: filters
+            },
+           
+        ];
+        console.log(aggregates)
+        const results = {
+            data: await collection.aggregate([...aggregates, ...paginationAggregates]).toArray(),
+            meta: {
+                totalElmtCount: await this.getTotalElmtCount( aggregates)
+            }
+        }
+        return results;
     }
 }

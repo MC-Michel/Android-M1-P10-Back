@@ -159,12 +159,27 @@ class GenRepository {
 
     createPaginationAggregates(){
         const paginationOptions = this.createPaginationOptions();
+        const ans = [];
+        if( paginationOptions.sort){
+            ans.push( paginationOptions.sort)
+        }
+        if( paginationOptions.skip){
+            ans.push( paginationOptions.skip)
+        }
+        if( paginationOptions.limit){
+            ans.push( paginationOptions.limit)
+        }
+        return ans;
+    }
+    async getTotalElmtCount(baseAggregates){
+        const aggregates = [...baseAggregates, {
+            $group: {
+              _id: null,
+              count: { $sum: 1 }
+            }
+          }];
 
-        return [
-            {$sort: paginationOptions.sort},
-            {$skip: paginationOptions.skip},
-            {$limit: paginationOptions.limit}
-        ];
+          return (await this.getCollection().aggregate(aggregates).toArray())[0]?.count || 0
     }
 }
 

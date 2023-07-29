@@ -23,6 +23,12 @@ const getListForVisitor = async function(req, res) {
   const data = await DestinationService.findCoreDestinations(params);
   res.json(data);
 };
+const getFavoriteListForVisitor = async function (req, res) {
+  const params = req.query;
+  const data = await DestinationService.findCoreFavoritesDestinations(req.params.userId, params);
+  res.json(data);
+}
+
 const getListForAdmin = async function(req, res) {  
   const data = await DestinationService.findCoreDestinations(req.query);
   res.json(data);
@@ -63,6 +69,8 @@ const getById = async function (req, res){
 //Visitor endpoints
 router.get('/', createRouteCallback(getListForVisitor));
 router.get('/:id', createRouteCallback(getById));
+router.get('/favorites/:userId', createRouteCallback(getFavoriteListForVisitor));
+
 router.post('', createBodySchemaParser(Destination), createRouteCallback(insertDestination));
 router.patch('',createBodySchemaParser(Destination, 'updateSchemaDto'), createRouteCallback(updateDestination));
 router.delete('/:id', createRouteCallback(deleteDestinationVisitor));
