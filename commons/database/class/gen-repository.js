@@ -121,6 +121,10 @@ class GenRepository {
         const collection = getConnection().collection(this.entityClass.collection);
         return await collection.deleteOne({_id: ObjectID(id)});
     }
+    async deleteByFilter(filter){
+        const collection = getConnection().collection(this.entityClass.collection);
+        return await collection.deleteMany(filter);
+    }
 
     createMatchOptions(filters, filterMode){
         if(!filters || filters.length === 0) return {}

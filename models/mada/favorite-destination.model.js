@@ -12,6 +12,9 @@ class FavoriteDestination {
     static createSchemaDto = (()=> { 
         const ans = {...this.schema};  
         return ans;}) ();
+    static deleteSchemaDto = (()=> { 
+        const ans = {...this.schema};  
+        return ans;}) ();
     static updateSchemaDto =  (()=> { 
         const ans = {...this.schema, _id}; 
         return ans;}) ();

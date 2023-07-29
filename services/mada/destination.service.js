@@ -63,6 +63,13 @@ module.exports = class DestinationService {
         favorite.userId = new ObjectID(favorite.userId)
         return favoritesRepository.insert(favorite, "createSchemaDto")
     }
+
+    static removeFavorite(destinationId, userId){
+        return favoritesRepository.deleteByFilter({
+            destinationId: ObjectID(destinationId),
+            userId: ObjectID(userId)
+        })
+    }
 }
 
      

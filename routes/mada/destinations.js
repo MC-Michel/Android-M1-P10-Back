@@ -38,7 +38,9 @@ const getListForAdmin = async function(req, res) {
 const createFavorite = async function (req, res) {
   res.json(await DestinationService.addFavorite(req.body));
 }
-
+const deleteFavorite = async function(req,res){
+  res.json(await DestinationService.removeFavorite(req.body.destinationId, req.body.userId));
+}
 
 
 const insertDestination = async function(req, res) {
@@ -78,6 +80,7 @@ router.get('/', createRouteCallback(getListForVisitor));
 router.get('/:id', createRouteCallback(getById));
 router.get('/favorites/:userId', createRouteCallback(getFavoriteListForVisitor));
 router.post('/favorites', createBodySchemaParser(FavoriteDestination, 'createSchemaDto'), createRouteCallback(createFavorite));
+router.delete('/favorites', createBodySchemaParser(FavoriteDestination, 'deleteSchemaDto'), createRouteCallback(deleteFavorite));
 
 router.post('', createBodySchemaParser(Destination), createRouteCallback(insertDestination));
 router.patch('',createBodySchemaParser(Destination, 'updateSchemaDto'), createRouteCallback(updateDestination));
