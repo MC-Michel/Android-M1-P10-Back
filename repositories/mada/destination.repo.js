@@ -30,7 +30,7 @@ module.exports = class DestinationRepository extends GenRepository {
         
         const projectAggregate = {};
         params.excludeFields.map(fieldToExclude => projectAggregate[fieldToExclude] = 0)
-      
+       
 
         const aggregates = [
             {
@@ -38,11 +38,11 @@ module.exports = class DestinationRepository extends GenRepository {
                     from: FavoriteDestination.collection,
                     localField: "_id",
                     foreignField: "destinationId",
-                    as: "favorites"
+                    as: "favorite"
                 }
             },
             {
-                $unwind: "$favorites"
+                $unwind: "$favorite"
             },
             {
                 $project: projectAggregate
@@ -52,7 +52,7 @@ module.exports = class DestinationRepository extends GenRepository {
             },
            
         ];
-        console.log(aggregates)
+        console.log(JSON.stringify(aggregates))
         const results = {
             data: await collection.aggregate([...aggregates, ...paginationAggregates]).toArray(),
             meta: {

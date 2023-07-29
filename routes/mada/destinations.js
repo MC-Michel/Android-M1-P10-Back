@@ -14,6 +14,7 @@ const DestinationRepository = require('../../repositories/mada/destination.repo'
 const { findCoreDestinationById } = require('../../services/mada/destination.service');
 const { destinationStatus } = require('../../models/constant.model');
 const FirebaseService = require('../../services/mada/external/firebase.service');
+const FavoriteDestination = require('../../models/mada/favorite-destination.model');
 var router = express.Router();
 
 const repository = new DestinationRepository();
@@ -33,6 +34,12 @@ const getListForAdmin = async function(req, res) {
   const data = await DestinationService.findCoreDestinations(req.query);
   res.json(data);
 };
+
+const createFavorite = async function (req, res) {
+  res.json(await DestinationService.addFavorite(req.body));
+}
+
+
 
 const insertDestination = async function(req, res) {
   const body = assign(Destination, req.body, 'createSchemaDto');
@@ -70,6 +77,7 @@ const getById = async function (req, res){
 router.get('/', createRouteCallback(getListForVisitor));
 router.get('/:id', createRouteCallback(getById));
 router.get('/favorites/:userId', createRouteCallback(getFavoriteListForVisitor));
+router.post('/favorites', createBodySchemaParser(FavoriteDestination, 'createSchemaDto'), createRouteCallback(createFavorite));
 
 router.post('', createBodySchemaParser(Destination), createRouteCallback(insertDestination));
 router.patch('',createBodySchemaParser(Destination, 'updateSchemaDto'), createRouteCallback(updateDestination));

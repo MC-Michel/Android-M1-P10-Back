@@ -3,9 +3,12 @@ const GenRepository = require("../../commons/database/class/gen-repository");
 const CustomError = require("../../errors/custom-error");
 const Destination = require("../../models/mada/destination.model");
 const DestinationRepository = require("../../repositories/mada/destination.repo");
+const FavoriteDestination = require("../../models/mada/favorite-destination.model");
 
  
 const repository = new DestinationRepository()
+const favoritesRepository = new GenRepository(FavoriteDestination)
+
 module.exports = class DestinationService {
     static async findCoreDestinationById(_id, options = {}){
         const filter = [{
@@ -48,13 +51,18 @@ module.exports = class DestinationService {
             column: 'favorite.userId',
             type:'string',
             comparator: '=',
-            value: userId
+            value: ObjectID(userId)
         }, 
         );
         const result = await repository.findWithRelations(params); 
         return result;
     }
     
+    static addFavorite(favorite){
+        favorite.destinationId = new ObjectID(favorite.destinationId);
+        favorite.userId = new ObjectID(favorite.userId)
+        return favoritesRepository.insert(favorite, "createSchemaDto")
+    }
 }
 
      
