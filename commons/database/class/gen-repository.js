@@ -80,7 +80,7 @@ class GenRepository {
                 totalElmtCount: (await collection.countDocuments(filters))
             }
         };
-        console.log(ans)
+        
         return ans;
     }
 

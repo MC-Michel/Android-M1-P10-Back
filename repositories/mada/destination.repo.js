@@ -23,12 +23,50 @@ module.exports = class DestinationRepository extends GenRepository {
         super(Destination);
     }
     //same params as in general find. 
-    async findWithRelations(params){
+    // async findForFavorites(params){
+    //     const collection = this.getCollection();
+    //     const filters = this.createMatchOptions(params.filter, params.filterMode);
+    //     const paginationAggregates = this.createPaginationAggregates(params.pagination);
+        
+    //     const projectAggregate = {};
+    //     params.excludeFields.map(fieldToExclude => projectAggregate[fieldToExclude] = 0)
+       
+
+    //     const aggregates = [
+    //         {
+    //             $lookup: {
+    //                 from: FavoriteDestination.collection,
+    //                 localField: "_id",
+    //                 foreignField: "destinationId",
+    //                 as: "favorite"
+    //             }
+    //         },
+    //         {
+    //             $unwind: "$favorite"
+    //         },
+    //         {
+    //             $project: projectAggregate
+    //         },
+    //         {
+    //             $match: filters
+    //         },
+           
+    //     ];
+      
+    //     const results = {
+    //         data: await collection.aggregate([...aggregates, ...paginationAggregates]).toArray(),
+    //         meta: {
+    //             totalElmtCount: await this.getTotalElmtCount( aggregates)
+    //         }
+    //     }
+    //     return results;
+    // }
+    async findWithFavoriteStatus(params, userId){
         const collection = this.getCollection();
         const filters = this.createMatchOptions(params.filter, params.filterMode);
         const paginationAggregates = this.createPaginationAggregates(params.pagination);
         
-        const projectAggregate = {};
+        const projectAggregate = {favorites: 0};
         params.excludeFields.map(fieldToExclude => projectAggregate[fieldToExclude] = 0)
        
 
@@ -38,11 +76,15 @@ module.exports = class DestinationRepository extends GenRepository {
                     from: FavoriteDestination.collection,
                     localField: "_id",
                     foreignField: "destinationId",
-                    as: "favorite"
+                    as: "favorites"
                 }
             },
             {
-                $unwind: "$favorite"
+                $addFields: {
+                    "isFavorite": {
+                        $in: [userId, "$favorites"]
+                    }
+                }
             },
             {
                 $project: projectAggregate
@@ -52,7 +94,7 @@ module.exports = class DestinationRepository extends GenRepository {
             },
            
         ];
-        console.log(JSON.stringify(aggregates))
+      
         const results = {
             data: await collection.aggregate([...aggregates, ...paginationAggregates]).toArray(),
             meta: {

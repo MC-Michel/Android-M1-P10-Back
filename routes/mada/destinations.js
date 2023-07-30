@@ -26,7 +26,7 @@ const getListForVisitor = async function(req, res) {
 };
 const getFavoriteListForVisitor = async function (req, res) {
   const params = req.query;
-  const data = await DestinationService.findCoreFavoritesDestinations(req.params.userId, params);
+  const data = await DestinationService.findConnectedUsersDestinations(req.params.userId, params);
   res.json(data);
 }
 
@@ -78,7 +78,7 @@ const getById = async function (req, res){
 //Visitor endpoints
 router.get('/', createRouteCallback(getListForVisitor));
 router.get('/:id', createRouteCallback(getById));
-router.get('/favorites/:userId', createRouteCallback(getFavoriteListForVisitor));
+router.get('/user/:userId', createRouteCallback(getFavoriteListForVisitor));
 router.post('/favorites', createBodySchemaParser(FavoriteDestination, 'createSchemaDto'), createRouteCallback(createFavorite));
 router.delete('/favorites', createBodySchemaParser(FavoriteDestination, 'deleteSchemaDto'), createRouteCallback(deleteFavorite));
 
