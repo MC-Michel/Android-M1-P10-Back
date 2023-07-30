@@ -151,6 +151,8 @@ class GenRepository {
         return { [filterMode ==='or'?'$or': '$and']: ans };
     }
     parseValue(value, type){
+        if(type === "boolean")
+            return value === "true";
         if(type === "int" || type === "float" || type === "number")
             return +value;
         if(type === "date")
