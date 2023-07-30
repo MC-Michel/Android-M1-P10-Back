@@ -82,7 +82,7 @@ module.exports = class DestinationRepository extends GenRepository {
             {
                 $addFields: {
                     "isFavorite": {
-                        $in: [userId, "$favorites"]
+                        $in: [ObjectID(userId), "$favorites"]
                     }
                 }
             },

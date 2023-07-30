@@ -43,6 +43,7 @@ module.exports = class DestinationService {
     static async findConnectedUsersDestinations(userId, params){
         if(!params.filter) params.filter = []
         params.excludeFields = ['content'] // We dont select the content when fetching list
+        console.log(params)
         params.filter.push({
             column: 'deletedAt',
             type:'date',
