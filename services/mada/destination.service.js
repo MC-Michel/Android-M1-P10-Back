@@ -56,6 +56,21 @@ module.exports = class DestinationService {
     
     static addFavorite(favorite){
         favorite.destinationId = new ObjectID(favorite.destinationId); 
+        const existing = favoritesRepository.find({filter: [
+            {
+                column: 'destinationId',
+                value: favorite.destinationId ,
+                type: 'string',
+                comparator: '='
+            }, 
+            {
+                column: 'userId',
+                value: favorite.userId ,
+                type: 'string',
+                comparator: '='
+            }
+        ]})
+        if(existing.length > 0) return {message: "already existing"};
         return favoritesRepository.insert(favorite, "createSchemaDto")
     }
 
