@@ -67,8 +67,8 @@ module.exports = class DestinationRepository extends GenRepository {
         const paginationAggregates = this.createPaginationAggregates(params.pagination);
         
         const projectAggregate = {favorites: 0};
-        params.excludeFields.map(fieldToExclude => projectAggregate[fieldToExclude] = 0)
-       
+        params.excludeFields?.map(fieldToExclude => projectAggregate[fieldToExclude] = 0)
+         
 
         const aggregates = [
             {
@@ -82,7 +82,7 @@ module.exports = class DestinationRepository extends GenRepository {
             {
                 $addFields: {
                     "isFavorite": {
-                        $in: [ObjectID(userId), "$favorites"]
+                        $in: [ObjectID(userId), "$favorites.userId"]
                     }
                 }
             },
@@ -95,12 +95,14 @@ module.exports = class DestinationRepository extends GenRepository {
            
         ];
       
+      
         const results = {
             data: await collection.aggregate([...aggregates, ...paginationAggregates]).toArray(),
             meta: {
                 totalElmtCount: await this.getTotalElmtCount( aggregates)
             }
         }
+       
         return results;
     }
 }

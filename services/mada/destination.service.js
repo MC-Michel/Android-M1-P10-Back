@@ -53,10 +53,35 @@ module.exports = class DestinationService {
         const result = await repository.findWithFavoriteStatus(params, userId); 
         return result;
     }
+
+    static async findConnectedUsersDestinationsById(userId, destinationId, options = {}){
+        const params= {filter: [
+            {
+                column: 'deletedAt',
+                type:'date',
+                comparator: 'notExistsOrNull'
+            },
+            {
+                column: '_id',
+                type:'string',
+                comparator: '=',
+                value: new ObjectID(destinationId)
+            },
+        ]}
+     
+        
+       
+        const result = await repository.findWithFavoriteStatus(params, userId); 
+        if(result.data.length === 0) {
+            if(options.exists) throw new CustomError('Destination inexistante')
+            return null;
+        }
+        return result.data[0];
+    }
     
-    static addFavorite(favorite){
+    static async  addFavorite(favorite){
         favorite.destinationId = new ObjectID(favorite.destinationId); 
-        const existing = favoritesRepository.find({filter: [
+        const existing = await favoritesRepository.find({filter: [
             {
                 column: 'destinationId',
                 value: favorite.destinationId ,
@@ -70,8 +95,8 @@ module.exports = class DestinationService {
                 comparator: '='
             }
         ]})
-        if(existing.length > 0) return {message: "already existing"};
-        return favoritesRepository.insert(favorite, "createSchemaDto")
+        if(existing.data.length > 0) return {message: "already existing"};
+        return await favoritesRepository.insert(favorite, "createSchemaDto")
     }
 
     static removeFavorite(destinationId, userId){
