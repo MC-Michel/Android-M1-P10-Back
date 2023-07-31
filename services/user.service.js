@@ -8,8 +8,8 @@ const TokenRepository = require("../repositories/token.repo");
 const userRepository = new GenRepository(User)
 const tokenRepository = new TokenRepository;
 module.exports = class UserService {
-    static async findUserByValidToken(token){
-        return await tokenRepository.findUser(token);
+    static async findUserByValidToken(token, allowNullResult){
+        return await tokenRepository.findUser(token, allowNullResult);
     }
     static async findUserByEmailAndPassword(data){
         const users = await userRepository.find({

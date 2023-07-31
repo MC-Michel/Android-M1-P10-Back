@@ -4,14 +4,14 @@ const CustomError = require('../errors/custom-error');
 const UserService = require('../services/user.service');
 
 
-module.exports = function createAuth(allowedRoles=[]){
+module.exports = function createAuth(allowedRoles=[], allowUnconnectedUser=false){
     const tokenCheck = header('token').isString().withMessage(noAuthenticationMessage);
     const authentication = async function (req, res, next){
       
         try{
             const token = req.headers.token;
-            const user = await UserService.findUserByValidToken(token);
-            if(!user)throw new CustomError ("Session expire");
+            const user = await UserService.findUserByValidToken(token,allowUnconnectedUser);
+            if(!user && !allowUnconnectedUser)throw new CustomError ("Session expire");
             req.currentUser = user; 
             next();
         }catch(e){
@@ -24,10 +24,12 @@ module.exports = function createAuth(allowedRoles=[]){
       
     }
     const authorization = async function (req, res, next){
+        if(allowUnconnectedUser) return next();
         const allowedRolesArr = [...allowedRoles];
         if(allowedRolesArr.length ===0) return next(); //all roles allowed
         if(allowedRolesArr.includes(req.currentUser.roleId)) return next();
         res.status(403).json({message:"Acces interdit"});
     }
-    return [tokenCheck, authentication, authorization];
+    const ans= allowUnconnectedUser? []: [tokenCheck];
+    return [...ans, authentication, authorization];
 }

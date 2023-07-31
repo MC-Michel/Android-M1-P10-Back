@@ -21,25 +21,28 @@ const repository = new DestinationRepository();
 
 const getListForVisitor = async function(req, res) {  
   const params = req.query;
-  const data = await DestinationService.findCoreDestinations(params);
+  const currentUser = req.currentUser;
+  console.log(currentUser)
+  const data = currentUser ?
+    await DestinationService.findConnectedUsersDestinations(currentUser._id, params):
+    await DestinationService.findCoreDestinations(params);
+  
   res.json(data);
 };
-const getFavoriteListForVisitor = async function (req, res) {
-  const params = req.query;
-  const data = await DestinationService.findConnectedUsersDestinations(req.params.userId, params);
-  res.json(data);
-}
-
+ 
 const getListForAdmin = async function(req, res) {  
   const data = await DestinationService.findCoreDestinations(req.query);
   res.json(data);
 };
 
 const createFavorite = async function (req, res) {
+  const currentUser = req.currentUser;
+  req.body.userId = currentUser._id;
   res.json(await DestinationService.addFavorite(req.body));
 }
 const deleteFavorite = async function(req,res){
-  res.json(await DestinationService.removeFavorite(req.body.destinationId, req.body.userId));
+  const currentUser = req.currentUser;
+  res.json(await DestinationService.removeFavorite(req.body.destinationId, currentUser._id));
 }
 
 
@@ -76,11 +79,12 @@ const getById = async function (req, res){
 
 
 //Visitor endpoints
-router.get('/', createRouteCallback(getListForVisitor));
+router.get('/', createAuth([], true), createRouteCallback(getListForVisitor));
+
 router.get('/:id', createRouteCallback(getById));
-router.get('/user/:userId', createRouteCallback(getFavoriteListForVisitor));
-router.post('/favorites', createBodySchemaParser(FavoriteDestination, 'createSchemaDto'), createRouteCallback(createFavorite));
-router.delete('/favorites', createBodySchemaParser(FavoriteDestination, 'deleteSchemaDto'), createRouteCallback(deleteFavorite));
+ 
+router.post('/favorites',createAuth([]), createBodySchemaParser(FavoriteDestination, 'createSchemaDto'), createRouteCallback(createFavorite));
+router.delete('/favorites',createAuth([]), createBodySchemaParser(FavoriteDestination, 'deleteSchemaDto'), createRouteCallback(deleteFavorite));
 
 router.post('', createBodySchemaParser(Destination), createRouteCallback(insertDestination));
 router.patch('',createBodySchemaParser(Destination, 'updateSchemaDto'), createRouteCallback(updateDestination));
