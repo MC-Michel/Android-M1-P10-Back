@@ -1,5 +1,4 @@
 const {body} = require('express-validator');
-const Car = require('../models/car.model');
 /**
  * 
  * @param {{

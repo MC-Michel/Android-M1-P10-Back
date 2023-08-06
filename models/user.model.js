@@ -1,6 +1,5 @@
 const { body } = require("express-validator");
 const md5 = require("md5");
-const Customer = require("./customer.submodel");
 
 class User {
     static collection = "User";

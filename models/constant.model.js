@@ -6,18 +6,6 @@ class Constant {
         created : 0,
         validated : 1
     };
-    static carStatus = {
-        inCirculation : 0, 
-        deposited : 1,
-        inReparation: 2,
-        waitExit : 3,
-    };
-    static repairStatus = {
-        todo : 0,
-        inprogress : 1,
-        ended : 2
-    };
-    static tva = 20;
     // For mada's project
     static destinationStatus = {
         deleted : -1,
