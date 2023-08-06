@@ -22,45 +22,7 @@ module.exports = class DestinationRepository extends GenRepository {
     constructor(){
         super(Destination);
     }
-    //same params as in general find. 
-    // async findForFavorites(params){
-    //     const collection = this.getCollection();
-    //     const filters = this.createMatchOptions(params.filter, params.filterMode);
-    //     const paginationAggregates = this.createPaginationAggregates(params.pagination);
-        
-    //     const projectAggregate = {};
-    //     params.excludeFields.map(fieldToExclude => projectAggregate[fieldToExclude] = 0)
-       
-
-    //     const aggregates = [
-    //         {
-    //             $lookup: {
-    //                 from: FavoriteDestination.collection,
-    //                 localField: "_id",
-    //                 foreignField: "destinationId",
-    //                 as: "favorite"
-    //             }
-    //         },
-    //         {
-    //             $unwind: "$favorite"
-    //         },
-    //         {
-    //             $project: projectAggregate
-    //         },
-    //         {
-    //             $match: filters
-    //         },
-           
-    //     ];
-      
-    //     const results = {
-    //         data: await collection.aggregate([...aggregates, ...paginationAggregates]).toArray(),
-    //         meta: {
-    //             totalElmtCount: await this.getTotalElmtCount( aggregates)
-    //         }
-    //     }
-    //     return results;
-    // }
+    
     async findWithFavoriteStatus(params, userId){
         const collection = this.getCollection();
         const filters = this.createMatchOptions(params.filter, params.filterMode);

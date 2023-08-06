@@ -29,11 +29,6 @@ const getListForVisitor = async function(req, res) {
   
   res.json(data);
 };
- 
-const getListForAdmin = async function(req, res) {  
-  const data = await DestinationService.findCoreDestinations(req.query);
-  res.json(data);
-};
 
 const createFavorite = async function (req, res) {
   const currentUser = req.currentUser;
@@ -92,15 +87,5 @@ router.delete('/favorites/:destinationId',createAuth([]), createRouteCallback(de
 router.post('', createBodySchemaParser(Destination), createRouteCallback(insertDestination));
 router.patch('',createBodySchemaParser(Destination, 'updateSchemaDto'), createRouteCallback(updateDestination));
 router.delete('/:id', createRouteCallback(deleteDestinationVisitor));
-
-
-// router.delete('/visitor/:id', createAuth([1]), createRouteCallback(deleteDestinationVisitor));
-// router.patch('/visitor',createAuth([1]),createBodySchemaParser(Destination, 'updateSchemaDto'), createRouteCallback(updateDestination));
-// router.post('', createAuth([1]), createBodySchemaParser(Destination), createRouteCallback(insertDestination));
-// router.get('/visitor/:id', createAuth([1]), createRouteCallback(getById));
-
-
-//Admins endpoints
-// router.get('/admin', createAuth([2,3]), createRouteCallback(getListForAdmin));
 
 module.exports = router;
