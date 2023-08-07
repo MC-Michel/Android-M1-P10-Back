@@ -51,7 +51,7 @@ module.exports = class UserService {
     }
 
     static buildSigninMail(newUser){
-        let societyName = "Zahao";
+        let societyName = "MADA-Zahao";
         let mail = {
             to: newUser.email,
             subject: `Bienvenue chez ${societyName}`,
