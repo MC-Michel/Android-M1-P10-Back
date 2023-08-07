@@ -10,7 +10,7 @@ module.exports = class TokenRepository extends GenRepository{
         const currentCollection = this.getCollection();
         const results = await currentCollection.aggregate([
             {
-                $match: { token, $or: [{ expiresAt: {$gt: new Date()}}, { destroyedAt: {$exists: true, $ne: null}}]}
+                $match: { token, $and: [{ expiresAt: {$gt: new Date()}}, { $or: [{destroyedAt: {$exists: false}}, {destroyedAt: null}] }] }
             },{
                 $lookup:{
                     from: 'User',

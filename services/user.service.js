@@ -39,13 +39,13 @@ module.exports = class UserService {
             token: UserService.generateTokenStr(user),
             userId: user._id,
             createdAt: creationDate,
-            expiresAt: addDays(creationDate, 1)
+            expiresAt: addDays(creationDate, 300)
         }
         await tokenRepository.insert([token]);
         return token.token
     }
 
-    //TODO: Generate a real token
+     
     static generateTokenStr(user){
         return md5(new Date().toString()+user._id);
     }
